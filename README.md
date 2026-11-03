@@ -7,11 +7,31 @@ A modern Lua port of the classic [jellybeans.vim](https://github.com/nanotech/je
 - 🌙 Full True Color support (`termguicolors`)
 - 🌿 Built-in support for Treesitter syntax highlighting and LSP diagnostics
 - ⚙️ Flexible configuration via `setup()` (transparent background, italics, overrides)
-- 🚀 Compatible with Neovim's native package manager (`:packadd`) and modern managers like `lazy.nvim`
+- 🚀 Compatible with Neovim 0.12+ native package manager (`vim.pack`) and modern managers like `lazy.nvim`
 
 ## Installation
 
-### Using lazy.nvim (Recommended)
+### Using Neovim's native package manager (Neovim 0.12+)
+
+Neovim 0.12+ includes a built-in package manager. Add the following to your `init.lua`:
+
+```lua
+vim.opt.termguicolors = true
+
+vim.pack.add({
+  "https://github.com/mandalay-rp/jellybeans-lua.nvim",
+})
+
+require("jellybeans").setup({
+  -- Optional: customize the theme
+  transparent = false,
+  italic_comments = true,
+})
+
+vim.cmd.colorscheme("jellybeans")
+```
+
+### Using lazy.nvim
 
 ```lua
 {
@@ -26,23 +46,6 @@ A modern Lua port of the classic [jellybeans.vim](https://github.com/nanotech/je
     vim.cmd.colorscheme("jellybeans")
   end,
 }
-```
-
-### Using Neovim's native package manager
-
-Clone the repository into your `pack` directory:
-
-```sh
-git clone https://github.com/mandalay-rp/jellybeans-lua.nvim.git ~/.local/share/nvim/site/pack/themes/opt/jellybeans-lua.nvim
-```
-
-Then add the following to your `init.lua`:
-
-```lua
-vim.opt.termguicolors = true
-vim.cmd("packadd jellybeans-lua.nvim")
-require("jellybeans").setup() -- Optional: for customization
-vim.cmd.colorscheme("jellybeans")
 ```
 
 ## Configuration
