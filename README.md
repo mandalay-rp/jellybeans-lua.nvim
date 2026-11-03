@@ -2,6 +2,8 @@
 
 A modern Lua port of the classic [jellybeans.vim](https://github.com/nanotech/jellybeans.vim) color scheme for Neovim.
 
+![A screenshot of the color scheme in a Python file](jellebeans.png)
+
 ## Features
 
 - 🌙 Full True Color support (`termguicolors`)
