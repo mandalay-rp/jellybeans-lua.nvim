@@ -1,26 +1,44 @@
 local M = {}
 
 M.config = {
-  transparent = false,        -- Enable transparent background
-  italic_comments = true,     -- Italic comments (matching the original scheme)
+  transparent = false,
+  italic_comments = true,
   styles = {
-    sidebars = "dark",        -- "dark" or "transparent" for sidebars
-    floats = "dark",          -- "dark" or "transparent" for floating windows
+    sidebars = "dark",
+    floats = "dark",
   },
-  overrides = {},             -- Custom highlight group overrides
+  overrides = {},
 }
+
+-- Check if a string is a valid 6-digit hex color
+local function is_hex_color(str)
+  if type(str) ~= "string" then
+    return false
+  end
+  if #str ~= 6 then
+    return false
+  end
+  for i = 1, 6 do
+    local c = str:sub(i, i)
+    if not c:match("[0-9a-fA-F]") then
+      return false
+    end
+  end
+  return true
+end
 
 -- Normalize a color value: add '#' prefix to 6-digit hex colors if missing
 local function normalize_color(value)
   if type(value) ~= "string" then
     return value
   end
-  -- Leave special keywords as-is
   if value == "NONE" or value == "none" then
     return value
   end
-  -- If it's a 6-digit hex without '#', add it
-  if value:match("^%x%x%x%x%x%x$") then
+  if value:sub(1, 1) == "#" then
+    return value
+  end
+  if is_hex_color(value) then
     return "#" .. value
   end
   return value
@@ -63,8 +81,17 @@ function M.load()
   local colors = require("jellybeans.colors")
   local groups = require("jellybeans.groups").get(colors, M.config)
 
+  -- Apply user overrides explicitly after getting base groups
+  if M.config.overrides and next(M.config.overrides) then
+    for group, opts in pairs(M.config.overrides) do
+      -- Merge override with existing group definition
+      local base = groups[group] or {}
+      groups[group] = vim.tbl_deep_extend("force", base, opts)
+    end
+  end
+
+  -- Apply all highlight groups
   for group, opts in pairs(groups) do
-    -- Normalize colors before applying to prevent E5113 errors
     local normalized = normalize_hl(opts)
     vim.api.nvim_set_hl(0, group, normalized)
   end

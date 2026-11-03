@@ -71,7 +71,7 @@ function M.get(colors, config)
     SpellRare = { bg = colors.spell_rare_bg, undercurl = true, sp = colors.spell_rare_bg },
     SpellLocal = { bg = colors.spell_local_bg, undercurl = true, sp = colors.spell_local_bg },
 
-    -- Treesitter (modern syntax highlighting in Neovim)
+    -- Treesitter
     ["@comment"] = { link = "Comment" },
     ["@constant"] = { link = "Constant" },
     ["@string"] = { link = "String" },
@@ -110,13 +110,6 @@ function M.get(colors, config)
     DiffAdded = { fg = colors.string },
     DiffRemoved = { fg = colors.constant },
   }
-
-  -- Apply user overrides
-  if config.overrides then
-    for group, opts in pairs(config.overrides) do
-      groups[group] = vim.tbl_deep_extend("force", groups[group] or {}, opts)
-    end
-  end
 
   return groups
 end
